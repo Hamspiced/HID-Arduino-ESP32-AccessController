@@ -113,6 +113,33 @@ Run 5v- from Step Down to DC- on relay
 
 
 
+# Headless flash
+
+`make flash` compiles and uploads the Nano and the ESP32 with [arduino-cli](https://arduino.github.io/arduino-cli/), then writes the ESP32 LittleFS image from `ESP32_Code/data` (the web UI, plus `cards.txt` and `admin.txt`). The Arduino IDE is not required.
+
+```bash
+make bootstrap   # download arduino-cli if it is not on PATH, then install cores and libraries
+make list        # show serial ports
+make compile     # build both sketches, no upload
+make flash       # Nano, then ESP32 app, then LittleFS
+```
+
+The Nano target defaults to the ATmega328P old bootloader (`NANO_CPU=atmega328old`), which is what most clone boards need. An official Nano is:
+
+```bash
+make flash-nano NANO_CPU=atmega328
+```
+
+Ports come from `arduino-cli board list`. A CP2102 (`10C4:EA60`) or Espressif native USB id (`303A`) is the ESP32. An FTDI adapter (`0403:6001`) or official Arduino id (`2341`) is the Nano. CH340 adapters (`1A86:7523`) are used on both boards, so if both ports look the same, set them yourself:
+
+```bash
+make flash NANO_PORT=/dev/ttyUSB0 ESP_PORT=/dev/ttyUSB1
+```
+
+`make flash-esp32` uploads the ESP32 sketch and the filesystem. `make flash-esp32 SKIP_FS=1` (or `make flash SKIP_FS=1`) uploads firmware only and leaves the card list already stored on the device. `make flash-fs` rewrites LittleFS from `ESP32_Code/data`, which replaces `index.html`, `cards.txt`, and `admin.txt`.
+
+The IDE steps below still work.
+
 # Flashing Arduino via Arduino IDE
 
 Download and install Arduino IDE.

@@ -1,0 +1,12 @@
+board_manager:
+  additional_urls:
+    - https://espressif.github.io/arduino-esp32/package_esp32_index.json
+
+# The Wiegand library the sketches use is not the Library Manager "Wiegand NG" package.
+library:
+  enable_unsafe_install: true
+
+directories:
+  data: .arduino/data
+  user: .arduino/user
+  downloads: .arduino/staging
